@@ -7,7 +7,7 @@ const SITE = {
   // URL de la aplicación web de Google Apps Script (termina en /exec).
   // Guarda cada solicitud en la hoja "Cohen & Dabah · Contactos del sitio" y envía el correo a las socias.
   // Vacío = el botón abre el correo de la persona con el mensaje ya escrito.
-  formEndpoint: ""
+  formEndpoint: "https://script.google.com/macros/s/AKfycbxXXajmJh0DcS9e-xq6CJMUl79ocIZXVT8y9AYGG_L7yMmmrEO5eew1DmO0VCcJShov/exec"
 };
 // ---------------------------------------------------------------
 
