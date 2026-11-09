@@ -9,7 +9,10 @@ Sitio estático (HTML + CSS + JS, sin build). Se sube tal cual a Vercel.
 | `index.html` | Página principal |
 | `aviso-de-privacidad.html` | Aviso de privacidad (se abre en `/aviso-de-privacidad`) |
 | `styles.css` | Estilos y paleta de marca |
-| `script.js` | Formulario de contacto. **Aquí están los ajustes del sitio (correo, WhatsApp, formulario).** |
+| `script.js` | Formulario de contacto. **Aquí están los ajustes: destinatarios y URL del formulario (`formEndpoint`).** |
+| `motion.js` | Animaciones al hacer scroll y diagrama de estructura |
+| `apps-script/Code.gs` | Código que guarda cada solicitud en Google Sheets y la envía por correo a las socias (no se publica en el sitio) |
+| `404.html` | Página para enlaces rotos |
 | `fonts/` | DM Sans, servida desde el propio sitio (sin Google Fonts) |
 | `favicon.svg`, `apple-touch-icon.png`, `og-image.png` | Ícono del navegador, del iPhone y la imagen al compartir el link |
 | `vercel.json` | URLs limpias, cabeceras de seguridad y caché |
@@ -18,15 +21,22 @@ Sitio estático (HTML + CSS + JS, sin build). Se sube tal cual a Vercel.
 ## Antes de publicar: reemplazar datos
 
 1. **Dominio.** Ya configurado: `cohendabah.com`.
-2. **Correo.** `contacto@cohendabah.com`. Si usarán otra dirección, cambiarla en `index.html`, `script.js` y `aviso-de-privacidad.html`.
-3. **WhatsApp.** En `index.html` y `script.js`, cambiar `5215500000000` y `+52 55 0000 0000`.
+2. **Correos.** Las solicitudes llegan a `rebeca@cohendabah.com` y `claris@cohendabah.com` (en `script.js`, `apps-script/Code.gs`, `index.html` y el aviso de privacidad).
+3. **Formulario.** Instalar `apps-script/Code.gs` en la hoja "Cohen & Dabah · Contactos del sitio" (pasos al inicio del archivo) y pegar la URL en `formEndpoint` de `script.js`.
 4. **Aviso de privacidad.** Completar `[Razón social del despacho]` y `[domicilio completo]`, y revisar el texto completo. Es un borrador.
-5. **Socias.** Revisar las dos semblanzas; la de Claris está corta a propósito para completarla.
+5. **Preguntas frecuentes.** Revisar las cinco respuestas de la sección de preguntas; también están en los datos estructurados del `<head>` y deben coincidir.
+6. **Socias.** Revisar las dos semblanzas; la de Claris está corta a propósito para completarla.
 
 ## Formulario de contacto
 
-Sin configurar nada, el botón **Enviar mensaje** abre el correo de la persona con el mensaje ya escrito.
-Para recibir los mensajes directo en su bandeja sin que la persona abra su correo, creen una cuenta en un servicio de formularios (Formspree, Basin u otro), copien la URL que les dan y péguenla en `formEndpoint` dentro de `script.js`.
+Cada solicitud se guarda como una fila nueva en la hoja de Google "Cohen & Dabah · Contactos del sitio" y llega por correo a las dos socias. Al responder ese correo, la respuesta va directo a la persona que escribió. La columna **Estado** sirve para marcar el seguimiento (Nuevo, Contactado, Propuesta enviada…).
+
+Mientras `formEndpoint` esté vacío, el botón **Enviar mensaje** abre el correo de la persona con el mensaje ya escrito y dirigido a las dos socias.
+
+## SEO
+
+- Título, descripción, datos estructurados (despacho, socias, sitio y preguntas frecuentes), Open Graph, `sitemap.xml` y `robots.txt` ya están configurados.
+- Pendiente fuera del código: dar de alta el dominio en Google Search Console (verificación por registro TXT en IONOS) y enviar `https://cohendabah.com/sitemap.xml`. Opcional: perfil de empresa en Google con zona de servicio Ciudad de México.
 
 ## Publicar en Vercel
 

@@ -1,11 +1,12 @@
-// Cohen & Dabah — sitio v1
+// Cohen & Dabah — formulario de contacto
 // ---------------------------------------------------------------
-// Ajustes del sitio. Cambie estos tres valores y listo.
+// Ajustes del sitio.
 const SITE = {
-  email: "contacto@cohendabah.com",
-  whatsapp: "5215500000000",        // formato wa.me: 52 + 1 + 10 dígitos, sin espacios
-  // Si contratan un servicio de formularios (Formspree, Basin, etc.), pegue aquí su URL.
-  // Vacío = el formulario abre el correo de la persona con el mensaje ya escrito.
+  // Quienes reciben las solicitudes (también se usan si el formulario no puede enviarse).
+  recipients: ["rebeca@cohendabah.com", "claris@cohendabah.com"],
+  // URL de la aplicación web de Google Apps Script (termina en /exec).
+  // Guarda cada solicitud en la hoja "Cohen & Dabah · Contactos del sitio" y envía el correo a las socias.
+  // Vacío = el botón abre el correo de la persona con el mensaje ya escrito.
   formEndpoint: ""
 };
 // ---------------------------------------------------------------
@@ -25,10 +26,13 @@ const SITE = {
   if (!form) return;
   const status = document.getElementById("form-status");
   const btn = form.querySelector('button[type="submit"]');
+  const loadedAt = Date.now();
+  const contactLine = SITE.recipients.join(" o ");
 
-  function setStatus(msg, isError) {
+  function setStatus(msg, kind) {
     status.textContent = msg;
-    status.classList.toggle("is-error", !!isError);
+    status.classList.toggle("is-error", kind === "error");
+    status.classList.toggle("is-ok", kind === "ok");
   }
 
   function validate() {
@@ -50,48 +54,47 @@ const SITE = {
     if (bad) {
       setStatus(bad.id === "f-consent"
         ? "Para enviar, marque la casilla del aviso de privacidad."
-        : "Revise nombre, correo y mensaje; son necesarios para responderle.", true);
+        : "Revise nombre, correo y mensaje; son necesarios para responderle.", "error");
       bad.focus();
       return;
     }
-    if (document.getElementById("f-web").value) return; // trampa para bots
 
     const data = Object.fromEntries(new FormData(form).entries());
-    delete data.sitio_web;
+    data.consentimiento = document.getElementById("f-consent").checked;
+    data.pagina = location.href;
+    data.ms = Date.now() - loadedAt;
 
     if (SITE.formEndpoint) {
       btn.disabled = true;
       setStatus("Enviando…");
       try {
-        const res = await fetch(SITE.formEndpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) throw new Error(res.status);
+        // Sin encabezados propios: Apps Script no acepta la verificación previa (CORS) de un JSON.
+        const res = await fetch(SITE.formEndpoint, { method: "POST", body: JSON.stringify(data) });
+        const out = await res.json();
+        if (!out.ok) throw new Error(out.error || "error");
         form.reset();
-        setStatus("Mensaje enviado. Le escribiremos para agendar la reunión.");
+        setStatus("Mensaje enviado. Le escribiremos para agendar la reunión.", "ok");
       } catch (err) {
-        setStatus("No se pudo enviar. Escríbanos directamente a " + SITE.email + ".", true);
+        setStatus("No se pudo enviar. Escríbanos directamente a " + contactLine + ".", "error");
       } finally {
         btn.disabled = false;
       }
       return;
     }
 
+    if (data.sitio_web) return; // trampa para bots
     const body = [
       "Nombre: " + data.nombre,
-      data.empresa ? "Empresa: " + data.empresa : "",
+      data.empresa ? "Empresa: " + data.empresa : null,
       "Correo: " + data.correo,
-      data.telefono ? "Teléfono: " + data.telefono : "",
+      data.telefono ? "Teléfono: " + data.telefono : null,
       "Tema: " + data.tema,
       "",
       data.mensaje
-    ].filter((l, i) => l !== "" || i === 5).join("\n");
-    const href = "mailto:" + SITE.email +
+    ].filter((l) => l !== null).join("\n");
+    window.location.href = "mailto:" + SITE.recipients.join(",") +
       "?subject=" + encodeURIComponent("Contacto desde el sitio: " + data.tema) +
       "&body=" + encodeURIComponent(body);
-    window.location.href = href;
-    setStatus("Se abrió su correo con el mensaje listo para enviar. Si no se abrió, escríbanos a " + SITE.email + ".");
+    setStatus("Se abrió su correo con el mensaje listo para enviar. Si no se abrió, escríbanos a " + contactLine + ".");
   });
 })();
