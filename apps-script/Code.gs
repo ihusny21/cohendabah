@@ -1,3 +1,5 @@
+/** @OnlyCurrentDoc */
+
 /**
  * Cohen & Dabah · Formulario del sitio → Google Sheet + correo a las socias
  *
@@ -8,10 +10,14 @@
  * 4. Implementar → Nueva implementación → tipo "Aplicación web":
  *      Ejecutar como: Yo · Quién tiene acceso: Cualquier persona → Implementar.
  * 5. Copie la URL que termina en /exec y péguela en `formEndpoint` dentro de script.js.
+ *
+ * Permisos: @OnlyCurrentDoc limita el acceso a esta hoja únicamente (no a otras hojas ni a Drive).
+ * El script solo pide además "Enviar correo en su nombre".
+ * Al cambiar el código: Implementar → Gestionar implementaciones → editar → Nueva versión (la URL no cambia).
  */
 
 const RECIPIENTS = ["rebeca@cohendabah.com", "claris@cohendabah.com"];
-const SPREADSHEET_ID = "1i3aNZreeJBr_E8hXqcHney9yLcpQCt1FDl-jley4Vf0";
+const SPREADSHEET_ID = "1i3aNZreeJBr_E8hXqcHney9yLcpQCt1FDl-jley4Vf0"; // solo para el enlace en el correo
 const HEADERS = ["Fecha", "Nombre", "Empresa", "Correo", "Teléfono", "Tema", "Mensaje", "Aviso de privacidad", "Página", "Estado"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -53,7 +59,7 @@ function saveRow_(row) {
   const lock = LockService.getScriptLock();
   lock.waitLock(15000);
   try {
-    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheets()[0];
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
     if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
     sheet.appendRow([
       new Date(),
@@ -97,6 +103,7 @@ function notify_(row) {
 
 /** Ejecute esta función una vez desde el editor para autorizar y probar. */
 function probar() {
+  SpreadsheetApp.getActiveSpreadsheet().setSpreadsheetTimeZone("America/Mexico_City");
   const res = doPost({ postData: { contents: JSON.stringify({
     nombre: "Prueba del sitio", empresa: "—", correo: RECIPIENTS[0], telefono: "",
     tema: "Prueba", mensaje: "Mensaje de prueba. Puede borrar esta fila.", consentimiento: true,
