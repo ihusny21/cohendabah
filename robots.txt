@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tudominio.mx/sitemap.xml
+Sitemap: https://cohendabah.com/sitemap.xml

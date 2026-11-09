@@ -10,15 +10,15 @@ Sitio estático (HTML + CSS + JS, sin build). Se sube tal cual a Vercel.
 | `aviso-de-privacidad.html` | Aviso de privacidad (se abre en `/aviso-de-privacidad`) |
 | `styles.css` | Estilos y paleta de marca |
 | `script.js` | Formulario de contacto. **Aquí están los ajustes del sitio (correo, WhatsApp, formulario).** |
-| `fonts/` | DM Sans y Fraunces, servidas desde el propio sitio (sin Google Fonts) |
+| `fonts/` | DM Sans, servida desde el propio sitio (sin Google Fonts) |
 | `favicon.svg`, `apple-touch-icon.png`, `og-image.png` | Ícono del navegador, del iPhone y la imagen al compartir el link |
 | `vercel.json` | URLs limpias, cabeceras de seguridad y caché |
 | `robots.txt`, `sitemap.xml` | Para Google |
 
 ## Antes de publicar: reemplazar datos
 
-1. **Dominio.** Buscar y reemplazar `tudominio.mx` por el dominio real en todos los archivos.
-2. **Correo.** `contacto@tudominio.mx` queda bien una vez hecho el paso 1; cambiarlo si usarán otra dirección.
+1. **Dominio.** Ya configurado: `cohendabah.com`.
+2. **Correo.** `contacto@cohendabah.com`. Si usarán otra dirección, cambiarla en `index.html`, `script.js` y `aviso-de-privacidad.html`.
 3. **WhatsApp.** En `index.html` y `script.js`, cambiar `5215500000000` y `+52 55 0000 0000`.
 4. **Aviso de privacidad.** Completar `[Razón social del despacho]` y `[domicilio completo]`, y revisar el texto completo. Es un borrador.
 5. **Socias.** Revisar las dos semblanzas; la de Claris está corta a propósito para completarla.
@@ -42,6 +42,6 @@ Cada cambio que se suba a GitHub se publica automáticamente.
 
 ## Marca
 
-- Azul medianoche `#14213D` · Rosa mexicano `#D81B72` · Marfil `#FAF5EC` · Pizarra `#4A5468`
-- Títulos: Fraunces · Texto y logotipo: DM Sans
-- Símbolo: el ampersand de 30° con la D arriba, la C abajo y el trazo rosa con cola.
+- Azul medianoche `#14213D` · Rosa mexicano `#D81B72` · Marfil `#FAF5EC` · Gris azulado `#4A5468`
+- Tipografía: DM Sans en todo el sitio (Bold para el nombre, Medium para títulos, Regular para texto)
+- Símbolo: opción 9b, "C | D con pilar". C en azul (marfil sobre fondo azul), D y pilar en rosa.

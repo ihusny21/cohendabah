@@ -2,7 +2,7 @@
 // ---------------------------------------------------------------
 // Ajustes del sitio. Cambie estos tres valores y listo.
 const SITE = {
-  email: "contacto@tudominio.mx",
+  email: "contacto@cohendabah.com",
   whatsapp: "5215500000000",        // formato wa.me: 52 + 1 + 10 dígitos, sin espacios
   // Si contratan un servicio de formularios (Formspree, Basin, etc.), pegue aquí su URL.
   // Vacío = el formulario abre el correo de la persona con el mensaje ya escrito.
